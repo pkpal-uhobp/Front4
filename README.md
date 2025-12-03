@@ -1,16 +1,84 @@
-# React + Vite
+## Tech Tracker — трекер освоения технологий по дорожной карте
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Tech Tracker** — это небольшое React‑приложение, которое позволяет загрузить дорожную карту в формате JSON и отслеживать свой прогресс по пунктам: статусы, заметки, дедлайны и общий процент выполнения.
 
-Currently, two official plugins are available:
+### Как запустить проект
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+-   **Установка зависимостей**
+    -   `npm install`
+-   **Запуск в dev‑режиме**
+    -   `npm start`
+-   **Продакшн‑сборка**
+    -   `npm run build`
+-   **Проверка линтером**
+    -   `npm run lint`
 
-## React Compiler
+### Формат JSON‑файла дорожной карты
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Минимальный формат файла:
 
-## Expanding the ESLint configuration
+```json
+{
+    "title": "React Roadmap",
+    "description": "Дорожная карта изучения React",
+    "items": [
+        {
+            "id": "jsx",
+            "title": "JSX",
+            "description": "Синтаксис JSX и его особенности.",
+            "resources": [
+                {
+                    "title": "React Docs - JSX",
+                    "url": "https://react.dev/learn/writing-markup-with-jsx"
+                }
+            ]
+        }
+    ]
+}
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+-   **title**: имя карты.
+-   **description**: опциональное описание карты.
+-   **items**: массив пунктов. У каждого пункта обязательно есть `id` (строка, уникальный идентификатор) и `title`.  
+    `resources` — массив ссылок на материалы (в карточке и на детальной странице отображается первая/все ссылки).
+
+Приложение также умеет **экспортировать** карту вместе с прогрессом — в экспортируемом JSON добавляется поле `userProgress` и `exportedAt`.
+
+### Структура приложения (основные файлы)
+
+-   **Точка входа**
+
+    -   `src/main.jsx` — монтирует React‑приложение в DOM (`#root`) и рендерит `App`.
+
+-   **Корневой компонент и маршрутизация**
+
+    -   `src/App.jsx` — настраивает `ThemeProvider` (Material UI), глобальные стили и роутинг (`/`, `/technologies`, `/technology/:id`, `/add`, `/dashboard`). Показывает шапку‑навигацию и футер.
+
+-   **Страницы**
+
+    -   `src/pages/Home.jsx` — главная страница. Если карта не загружена — интерфейс импорта (`RoadmapImporter`). Если загружена — название карты, краткое описание, общий прогресс и быстрые переходы к списку и статистике.
+    -   `src/pages/TechnologyList.jsx` — список всех пунктов карты в виде сетки карточек (`SimpleTechCard`) с фильтром по статусу (включая «Просроченные»), поиском, кнопками массовых действий и экспортом JSON.
+    -   `src/pages/TechnologyDetail.jsx` — детальная страница пункта: полное описание, все ресурсы‑ссылки, управление статусом, дедлайном и личными заметками (с сохранением в `localStorage`).
+    -   `src/pages/Dashboard.jsx` — дашборд со сводной статистикой: карточки с количеством пунктов по статусам, общий прогресс, вкладки «В работе», «Выполнено» и «Дедлайны».
+    -   `src/pages/AddTechnology.jsx` — страница загрузки новой дорожной карты (через `RoadmapImporter`) + подсказка с примером JSON и кнопка «Скачать пример».
+
+-   **Компоненты**
+
+    -   `src/components/Navigation.jsx` — верхнее меню (AppBar) с навигацией по разделам, адаптивный Drawer для мобильных.
+    -   `src/components/SimpleTechCard.jsx` — карточка пункта в списке: название, описание, статус (цвет и иконка), индикатор дедлайна/заметок и кнопки «Подробнее» и «Источник» (если есть ресурс).
+    -   `src/components/ProgressBar.jsx` — универсальный прогресс‑бар с процентами и, при необходимости, подписью «выполнено / в работе / не начато».
+    -   `src/components/RoadmapImporter.jsx` — drag‑and‑drop загрузка JSON‑файла, проверка формата, обработка ошибок и всплывающие уведомления.
+    -   `src/components/QuickActions.jsx` — панель быстрых действий над всеми пунктами (отметить все выполненными, сбросить статусы, экспортировать JSON, выбрать случайный пункт).
+    -   `src/components/Modal.jsx` — обёртка над `Dialog` из MUI для модальных окон (с обработкой Esc и клика по фону).
+
+-   **Хуки и работа с данными**
+    -   `src/hooks/useTechnologies.js` — основной бизнес‑хук. Хранит в `localStorage` загруженную дорожную карту (`roadmap`) и прогресс пользователя (`userProgress`), считает общий прогресс и статистику, даёт функции `updateStatus`, `updateNotes`, `updateDeadline`, `importRoadmap`, `exportRoadmap`, `resetAllProgress`, `markAllCompleted` и утилиты поиска/фильтрации.
+    -   `src/hooks/useLocalStorage.js` — универсальный хук для работы с `localStorage` c обработкой ошибок и синхронизацией между вкладками.
+    -   `src/hooks/useTechnologiesApi.js` — вспомогательный хук для загрузки дорожных карт из внешних API или файлов с учётом загрузки, ошибок, отмены запросов и debounce‑поиска.
+
+### Как пользоваться приложением
+
+-   Зайдите на **главную страницу** (`/`) и загрузите JSON‑файл с дорожной картой.
+-   Перейдите на **страницу технологий** (`/technologies`), чтобы увидеть все пункты в виде карточек, менять статусы, фильтровать и искать.
+-   Нажмите «Подробнее» на карточке или перейдите по ссылке `/technology/:id`, чтобы открыть детальную страницу, добавить заметки и дедлайн.
+-   Откройте раздел **«Статистика»** (`/dashboard`), чтобы посмотреть общий прогресс и ближайшие дедлайны.
