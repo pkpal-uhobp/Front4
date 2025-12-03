@@ -76,7 +76,6 @@ const Home = ({ onNavigate }) => {
 
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
-            {/* Header */}
             <Box sx={{ mb: 4 }}>
                 <Typography
                     variant="h4"
@@ -97,7 +96,6 @@ const Home = ({ onNavigate }) => {
                 )}
             </Box>
 
-            {/* Progress Overview */}
             <Paper sx={{ p: 3, mb: 4 }}>
                 <Typography variant="h6" gutterBottom>
                     Общий прогресс
@@ -111,7 +109,6 @@ const Home = ({ onNavigate }) => {
                 />
             </Paper>
 
-            {/* Quick Stats */}
             <Grid container spacing={3} sx={{ mb: 4 }}>
                 <Grid size={{ xs: 12, sm: 4 }}>
                     <Card
@@ -181,7 +178,6 @@ const Home = ({ onNavigate }) => {
                 </Grid>
             </Grid>
 
-            {/* Quick Actions */}
             <Grid container spacing={3}>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <Paper
@@ -255,7 +251,6 @@ const Home = ({ onNavigate }) => {
                 </Grid>
             </Grid>
 
-            {/* Import new roadmap option */}
             <Box sx={{ mt: 4, textAlign: 'center' }}>
                 <Button
                     variant="text"

@@ -22,7 +22,6 @@ const Modal = ({
   disableEscapeKeyDown = false,
   disableBackdropClick = false
 }) => {
-  // Handle Esc key
   const handleKeyDown = useCallback((event) => {
     if (event.key === 'Escape' && !disableEscapeKeyDown && onClose) {
       onClose();

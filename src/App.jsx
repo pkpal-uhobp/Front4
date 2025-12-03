@@ -4,18 +4,15 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Box } from '@mui/material';
 import './App.css';
 
-// Components
 import Navigation from './components/Navigation';
 import Modal from './components/Modal';
 
-// Pages
 import Home from './pages/Home';
 import TechnologyList from './pages/TechnologyList';
 import TechnologyDetail from './pages/TechnologyDetail';
 import AddTechnology from './pages/AddTechnology';
 import Dashboard from './pages/Dashboard';
 
-// Create MUI theme
 const theme = createTheme({
     palette: {
         primary: {

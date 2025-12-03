@@ -4,7 +4,6 @@ import './index.css';
 import App from './App.jsx';
 
 
-// Render the application
 const container = document.getElementById('root');
 const root = createRoot(container);
 
