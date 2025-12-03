@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { flushSync } from 'react-dom';
 import {
     Typography,
@@ -10,7 +11,10 @@ import {
     Alert,
     IconButton,
     Tooltip,
+    Container,
+    Paper,
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LinkIcon from '@mui/icons-material/Link';
@@ -21,7 +25,8 @@ import useTechnologies, {
     STATUS_COLORS,
 } from '../hooks/useTechnologies';
 
-const TechnologyDetail = ({ id, onClose }) => {
+const TechnologyDetail = () => {
+    const { id } = useParams();
     const { getTechnologyById, updateStatus, updateNotes, updateDeadline } =
         useTechnologies();
 
@@ -89,11 +94,19 @@ const TechnologyDetail = ({ id, onClose }) => {
 
     if (!technology) {
         return (
-            <Box sx={{ py: 2 }}>
+            <Container maxWidth="md" sx={{ py: 4 }}>
                 <Alert severity="warning">
                     Пункт не найден. Возможно, дорожная карта не загружена.
                 </Alert>
-            </Box>
+                <Button
+                    component={Link}
+                    to="/"
+                    startIcon={<ArrowBackIcon />}
+                    sx={{ mt: 2 }}
+                >
+                    На главную
+                </Button>
+            </Container>
         );
     }
 
@@ -104,8 +117,17 @@ const TechnologyDetail = ({ id, onClose }) => {
         currentStatus !== STATUS.COMPLETED;
 
     return (
-        <Box>
-            <Box sx={{ p: 2, mb: 2 }}>
+        <Container maxWidth="md" sx={{ py: 4 }}>
+            <Button
+                component={Link}
+                to="/technologies"
+                startIcon={<ArrowBackIcon />}
+                sx={{ mb: 3 }}
+            >
+                Назад к списку
+            </Button>
+
+            <Paper sx={{ p: 3, mb: 3 }}>
                 <Box
                     sx={{
                         display: 'flex',
@@ -161,9 +183,9 @@ const TechnologyDetail = ({ id, onClose }) => {
                         </Box>
                     </Box>
                 )}
-            </Box>
+            </Paper>
 
-            <Box sx={{ p: 2, mb: 2 }}>
+            <Paper sx={{ p: 3, mb: 3 }}>
                 <Typography variant="h6" gutterBottom>
                     Управление статусом
                 </Typography>
@@ -234,9 +256,9 @@ const TechnologyDetail = ({ id, onClose }) => {
                         />
                     )}
                 </Box>
-            </Box>
+            </Paper>
 
-            <Box sx={{ p: 2 }}>
+            <Paper sx={{ p: 3 }}>
                 <Box
                     sx={{
                         display: 'flex',
@@ -294,8 +316,21 @@ const TechnologyDetail = ({ id, onClose }) => {
                         Изменения сохранены!
                     </Alert>
                 )}
+            </Paper>
+
+            <Box
+                sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}
+            >
+                <Button
+                    component={Link}
+                    to="/technologies"
+                    variant="outlined"
+                    startIcon={<ArrowBackIcon />}
+                >
+                    Вернуться к списку
+                </Button>
             </Box>
-        </Box>
+        </Container>
     );
 };
 

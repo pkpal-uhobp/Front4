@@ -1,11 +1,11 @@
 import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Box } from '@mui/material';
 import './App.css';
 
 import Navigation from './components/Navigation';
-import Modal from './components/Modal';
 
 import Home from './pages/Home';
 import TechnologyList from './pages/TechnologyList';
@@ -46,87 +46,75 @@ const theme = createTheme({
     },
 });
 
-function App() {
+// Внутренний компонент для работы с роутингом
+function AppContent() {
     const [activeTab, setActiveTab] = useState(0);
-    const [selectedTechnologyId, setSelectedTechnologyId] = useState(null);
-    const [detailModalOpen, setDetailModalOpen] = useState(false);
 
     const handleTabChange = (newValue) => {
         setActiveTab(newValue);
     };
 
-    const handleTechnologyClick = (id) => {
-        setSelectedTechnologyId(id);
-        setDetailModalOpen(true);
-    };
-
-    const handleCloseDetailModal = () => {
-        setDetailModalOpen(false);
-        setSelectedTechnologyId(null);
-    };
-
-    const renderContent = () => {
+    const renderMainContent = () => {
         switch (activeTab) {
             case 0:
                 return <Home onNavigate={handleTabChange} />;
             case 1:
-                return (
-                    <TechnologyList onTechnologyClick={handleTechnologyClick} />
-                );
+                return <TechnologyList onNavigate={handleTabChange} />;
             case 2:
-                return <Dashboard onTechnologyClick={handleTechnologyClick} />;
+                return <Dashboard onNavigate={handleTabChange} />;
             case 3:
-                return <AddTechnology onSuccess={() => handleTabChange(1)} />;
+                return <AddTechnology onNavigate={handleTabChange} />;
             default:
                 return <Home onNavigate={handleTabChange} />;
         }
     };
 
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+            }}
+        >
+            <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
+            <Box component="main" sx={{ flexGrow: 1 }}>
+                <Routes>
+                    {/* Детальная страница использует роутинг */}
+                    <Route
+                        path="/technology/:id"
+                        element={<TechnologyDetail />}
+                    />
+                    {/* Остальные страницы рендерятся без роутинга */}
+                    <Route path="*" element={renderMainContent()} />
+                </Routes>
+            </Box>
             <Box
+                component="footer"
                 sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: '100vh',
+                    py: 2,
+                    px: 2,
+                    mt: 'auto',
+                    backgroundColor: 'grey.100',
+                    textAlign: 'center',
+                    color: 'text.secondary',
+                    fontSize: '0.875rem',
                 }}
             >
-                <Navigation
-                    activeTab={activeTab}
-                    onTabChange={handleTabChange}
-                />
-                <Box component="main" sx={{ flexGrow: 1 }}>
-                    {renderContent()}
-                </Box>
-                <Box
-                    component="footer"
-                    sx={{
-                        py: 2,
-                        px: 2,
-                        mt: 'auto',
-                        backgroundColor: 'grey.100',
-                        textAlign: 'center',
-                        color: 'text.secondary',
-                        fontSize: '0.875rem',
-                    }}
-                >
-                    Tech Tracker © {new Date().getFullYear()} - Персональный
-                    трекер освоения технологий
-                </Box>
-                <Modal
-                    open={detailModalOpen}
-                    onClose={handleCloseDetailModal}
-                    maxWidth="md"
-                >
-                    {selectedTechnologyId && (
-                        <TechnologyDetail
-                            id={selectedTechnologyId}
-                            onClose={handleCloseDetailModal}
-                        />
-                    )}
-                </Modal>
+                Tech Tracker © {new Date().getFullYear()} - Персональный трекер
+                освоения технологий
             </Box>
+        </Box>
+    );
+}
+
+function App() {
+    return (
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Router>
+                <AppContent />
+            </Router>
         </ThemeProvider>
     );
 }

@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Container,
     Typography,
@@ -31,13 +32,14 @@ import useTechnologies, {
 import ProgressBar from '../components/ProgressBar';
 
 const STATUS_ICONS = {
-    [STATUS.NOT_STARTED]: <RadioButtonUncheckedIcon/>,
-    [STATUS.IN_PROGRESS]: <PlayArrowIcon/>,
-    [STATUS.COMPLETED]: <CheckCircleIcon/>,
+    [STATUS.NOT_STARTED]: <RadioButtonUncheckedIcon />,
+    [STATUS.IN_PROGRESS]: <PlayArrowIcon />,
+    [STATUS.COMPLETED]: <CheckCircleIcon />,
 };
 
-const Dashboard = ({onTechnologyClick}) => {
-    const {roadmap, technologies, progress, stats} = useTechnologies();
+const Dashboard = ({ onNavigate }) => {
+    const navigate = useNavigate();
+    const { roadmap, technologies, progress, stats } = useTechnologies();
     const [tabValue, setTabValue] = useState(0);
 
     const handleTabChange = (event, newValue) => {
@@ -46,7 +48,7 @@ const Dashboard = ({onTechnologyClick}) => {
 
     if (!roadmap) {
         return (
-            <Container maxWidth="lg" sx={{py: 4}}>
+            <Container maxWidth="lg" sx={{ py: 4 }}>
                 <Alert severity="info">
                     Сначала загрузите дорожную карту на главной странице.
                 </Alert>
@@ -68,8 +70,8 @@ const Dashboard = ({onTechnologyClick}) => {
     );
 
     return (
-        <Container maxWidth="lg" sx={{py: 4}}>
-            <Box sx={{mb: 4}}>
+        <Container maxWidth="lg" sx={{ py: 4 }}>
+            <Box sx={{ mb: 4 }}>
                 <Typography
                     variant="h4"
                     component="h1"
@@ -83,9 +85,9 @@ const Dashboard = ({onTechnologyClick}) => {
                 </Typography>
             </Box>
 
-            <Grid container spacing={3} sx={{mb: 4}}>
-                <Grid size={{xs: 12, sm: 6, md: 3}}>
-                    <Card sx={{height: '100%'}}>
+            <Grid container spacing={3} sx={{ mb: 4 }}>
+                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                    <Card sx={{ height: '100%' }}>
                         <CardContent>
                             <Box
                                 sx={{
@@ -96,7 +98,7 @@ const Dashboard = ({onTechnologyClick}) => {
                             >
                                 <AssignmentIcon
                                     color="primary"
-                                    sx={{mr: 1}}
+                                    sx={{ mr: 1 }}
                                 />
                                 <Typography
                                     variant="subtitle2"
@@ -111,7 +113,7 @@ const Dashboard = ({onTechnologyClick}) => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid size={{xs: 12, sm: 6, md: 3}}>
+                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Card
                         sx={{
                             height: '100%',
@@ -129,7 +131,7 @@ const Dashboard = ({onTechnologyClick}) => {
                             >
                                 <CheckCircleIcon
                                     color="success"
-                                    sx={{mr: 1}}
+                                    sx={{ mr: 1 }}
                                 />
                                 <Typography
                                     variant="subtitle2"
@@ -148,7 +150,7 @@ const Dashboard = ({onTechnologyClick}) => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid size={{xs: 12, sm: 6, md: 3}}>
+                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Card
                         sx={{
                             height: '100%',
@@ -164,7 +166,7 @@ const Dashboard = ({onTechnologyClick}) => {
                                     mb: 1,
                                 }}
                             >
-                                <PlayArrowIcon color="warning" sx={{mr: 1}}/>
+                                <PlayArrowIcon color="warning" sx={{ mr: 1 }} />
                                 <Typography
                                     variant="subtitle2"
                                     color="text.secondary"
@@ -182,7 +184,7 @@ const Dashboard = ({onTechnologyClick}) => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid size={{xs: 12, sm: 6, md: 3}}>
+                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Card
                         sx={{
                             height: '100%',
@@ -198,7 +200,7 @@ const Dashboard = ({onTechnologyClick}) => {
                                     mb: 1,
                                 }}
                             >
-                                <TrendingUpIcon color="action" sx={{mr: 1}}/>
+                                <TrendingUpIcon color="action" sx={{ mr: 1 }} />
                                 <Typography
                                     variant="subtitle2"
                                     color="text.secondary"
@@ -214,7 +216,7 @@ const Dashboard = ({onTechnologyClick}) => {
                 </Grid>
             </Grid>
 
-            <Paper sx={{p: 3, mb: 4}}>
+            <Paper sx={{ p: 3, mb: 4 }}>
                 <Typography variant="h6" gutterBottom>
                     Общий прогресс
                 </Typography>
@@ -227,19 +229,19 @@ const Dashboard = ({onTechnologyClick}) => {
                 />
             </Paper>
 
-            <Paper sx={{mb: 3}}>
+            <Paper sx={{ mb: 3 }}>
                 <Tabs
                     value={tabValue}
                     onChange={handleTabChange}
                     variant="fullWidth"
                 >
-                    <Tab label={`В работе (${inProgressItems.length})`}/>
-                    <Tab label={`Выполнено (${completedItems.length})`}/>
-                    <Tab label={`Дедлайны (${upcomingDeadlines.length})`}/>
+                    <Tab label={`В работе (${inProgressItems.length})`} />
+                    <Tab label={`Выполнено (${completedItems.length})`} />
+                    <Tab label={`Дедлайны (${upcomingDeadlines.length})`} />
                 </Tabs>
             </Paper>
 
-            <Paper sx={{p: 3}}>
+            <Paper sx={{ p: 3 }}>
                 {tabValue === 0 && (
                     <Box>
                         <Typography variant="h6" gutterBottom>
@@ -253,12 +255,13 @@ const Dashboard = ({onTechnologyClick}) => {
                             <List>
                                 {inProgressItems.map((item, index) => (
                                     <Box key={item.id}>
-                                        {index > 0 && <Divider/>}
+                                        {index > 0 && <Divider />}
                                         <ListItem
                                             component="div"
                                             onClick={() =>
-                                                onTechnologyClick &&
-                                                onTechnologyClick(item.id)
+                                                navigate(
+                                                    `/technology/${item.id}`
+                                                )
                                             }
                                             sx={{
                                                 cursor: 'pointer',
@@ -287,7 +290,7 @@ const Dashboard = ({onTechnologyClick}) => {
                                                     backgroundColor:
                                                         STATUS_COLORS[
                                                             item.status
-                                                            ],
+                                                        ],
                                                     color: 'white',
                                                 }}
                                             />
@@ -312,12 +315,13 @@ const Dashboard = ({onTechnologyClick}) => {
                             <List>
                                 {completedItems.map((item, index) => (
                                     <Box key={item.id}>
-                                        {index > 0 && <Divider/>}
+                                        {index > 0 && <Divider />}
                                         <ListItem
                                             component="div"
                                             onClick={() =>
-                                                onTechnologyClick &&
-                                                onTechnologyClick(item.id)
+                                                navigate(
+                                                    `/technology/${item.id}`
+                                                )
                                             }
                                             sx={{
                                                 cursor: 'pointer',
@@ -328,7 +332,7 @@ const Dashboard = ({onTechnologyClick}) => {
                                             }}
                                         >
                                             <ListItemIcon>
-                                                <CheckCircleIcon color="success"/>
+                                                <CheckCircleIcon color="success" />
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={item.title}
@@ -366,12 +370,13 @@ const Dashboard = ({onTechnologyClick}) => {
                                         new Date(item.deadline) < new Date();
                                     return (
                                         <Box key={item.id}>
-                                            {index > 0 && <Divider/>}
+                                            {index > 0 && <Divider />}
                                             <ListItem
                                                 component="div"
                                                 onClick={() =>
-                                                    onTechnologyClick &&
-                                                    onTechnologyClick(item.id)
+                                                    navigate(
+                                                        `/technology/${item.id}`
+                                                    )
                                                 }
                                                 sx={{
                                                     cursor: 'pointer',
@@ -406,8 +411,8 @@ const Dashboard = ({onTechnologyClick}) => {
                                                         isOverdue
                                                             ? 'Просрочено'
                                                             : STATUS_LABELS[
-                                                                item.status
-                                                                ]
+                                                                  item.status
+                                                              ]
                                                     }
                                                     size="small"
                                                     color={
@@ -418,13 +423,13 @@ const Dashboard = ({onTechnologyClick}) => {
                                                     sx={
                                                         !isOverdue
                                                             ? {
-                                                                backgroundColor:
-                                                                    STATUS_COLORS[
-                                                                        item
-                                                                            .status
-                                                                        ],
-                                                                color: 'white',
-                                                            }
+                                                                  backgroundColor:
+                                                                      STATUS_COLORS[
+                                                                          item
+                                                                              .status
+                                                                      ],
+                                                                  color: 'white',
+                                                              }
                                                             : {}
                                                     }
                                                 />
