@@ -12,13 +12,14 @@ const ProgressBar = ({
 }) => {
   const normalizedValue = Math.min(100, Math.max(0, value));
 
-  const getColor = () => {
-    if (color !== 'auto') return color;
-    if (normalizedValue < 25) return 'error';
-    if (normalizedValue < 50) return 'warning';
-    if (normalizedValue < 75) return 'info';
-    return 'success';
-  };
+    const getColor = () => {
+        if (color !== 'auto') return color;
+        // Можно оставить как есть, так как основной цвет задается через sx
+        if (normalizedValue < 25) return 'error';
+        if (normalizedValue < 50) return 'warning';
+        if (normalizedValue < 75) return 'info';
+        return 'success';
+    };
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -38,20 +39,25 @@ const ProgressBar = ({
         arrow
         placement="top"
       >
-        <LinearProgress
-          variant="determinate"
-          value={normalizedValue}
-          color={getColor()}
-          sx={{
-            height,
-            borderRadius: height / 2,
-            backgroundColor: 'rgba(0,0,0,0.1)',
-            '& .MuiLinearProgress-bar': {
-              borderRadius: height / 2,
-              transition: animated ? 'transform 0.5s ease-in-out' : 'none'
-            }
-          }}
-        />
+          <LinearProgress
+              variant="determinate"
+              value={normalizedValue}
+              color={getColor()}
+              sx={{
+                  height,
+                  borderRadius: height / 2,
+                  backgroundColor: 'rgba(0,0,0,0.1)',
+                  '& .MuiLinearProgress-bar': {
+                      borderRadius: height / 2,
+                      transition: animated ? 'transform 0.5s ease-in-out, background-color 0.5s ease' : 'none',
+                      // Динамический цвет бара в зависимости от значения
+                      backgroundColor: normalizedValue < 25 ? '#f44336' : // Красный
+                          normalizedValue < 50 ? '#ff9800' : // Оранжевый
+                              normalizedValue < 75 ? '#ffc107' : // Желтый
+                                  '#4caf50', // Зеленый
+                  }
+              }}
+          />
       </Tooltip>
 
       {stats && (
