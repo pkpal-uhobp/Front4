@@ -1,82 +1,89 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
-  Container,
-  Typography,
-  Box,
-  Paper,
-  TextField,
-  Button,
-  Alert
+    Container,
+    Typography,
+    Box,
+    Paper,
+    TextField,
+    Button,
+    Alert,
 } from '@mui/material';
 import useTechnologies from '../hooks/useTechnologies';
 import RoadmapImporter from '../components/RoadmapImporter';
 
-const AddTechnology = () => {
-  const navigate = useNavigate();
-  const { roadmap, importRoadmap } = useTechnologies();
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+const AddTechnology = ({ onSuccess }) => {
+    const { roadmap, importRoadmap } = useTechnologies();
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(false);
 
-  const handleImport = (data) => {
-    try {
-      importRoadmap(data);
-      setSuccess(true);
-      setError(null);
-      setTimeout(() => {
-        navigate('/technologies');
-      }, 1500);
-    } catch (err) {
-      setError(err.message);
-      setSuccess(false);
-    }
-  };
+    const handleImport = (data) => {
+        try {
+            importRoadmap(data);
+            setSuccess(true);
+            setError(null);
+            setTimeout(() => {
+                if (onSuccess) {
+                    onSuccess();
+                }
+            }, 1500);
+        } catch (err) {
+            setError(err.message);
+            setSuccess(false);
+        }
+    };
 
-  return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
-        {roadmap ? 'Загрузить новую карту' : 'Добавить дорожную карту'}
-      </Typography>
+    return (
+        <Container maxWidth="md" sx={{ py: 4 }}>
+            <Typography
+                variant="h4"
+                component="h1"
+                gutterBottom
+                fontWeight="bold"
+            >
+                {roadmap ? 'Загрузить новую карту' : 'Добавить дорожную карту'}
+            </Typography>
 
-      {roadmap && (
-        <Alert severity="warning" sx={{ mb: 3 }}>
-          У вас уже загружена карта "{roadmap.title}". Загрузка новой карты заменит текущую.
-          Рекомендуем сначала экспортировать текущий прогресс.
-        </Alert>
-      )}
+            {roadmap && (
+                <Alert severity="warning" sx={{ mb: 3 }}>
+                    У вас уже загружена карта "{roadmap.title}". Загрузка новой
+                    карты заменит текущую. Рекомендуем сначала экспортировать
+                    текущий прогресс.
+                </Alert>
+            )}
 
-      {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
-          {error}
-        </Alert>
-      )}
+            {error && (
+                <Alert severity="error" sx={{ mb: 3 }}>
+                    {error}
+                </Alert>
+            )}
 
-      {success && (
-        <Alert severity="success" sx={{ mb: 3 }}>
-          Дорожная карта успешно загружена! Перенаправление...
-        </Alert>
-      )}
+            {success && (
+                <Alert severity="success" sx={{ mb: 3 }}>
+                    Дорожная карта успешно загружена! Перенаправление...
+                </Alert>
+            )}
 
-      <RoadmapImporter onImport={handleImport} />
+            <RoadmapImporter onImport={handleImport} />
 
-      <Paper sx={{ p: 3, mt: 4 }}>
-        <Typography variant="h6" gutterBottom>
-          Формат JSON файла
-        </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
-          Дорожная карта должна быть в формате JSON со следующей структурой:
-        </Typography>
-        <Box
-          component="pre"
-          sx={{
-            backgroundColor: 'grey.100',
-            p: 2,
-            borderRadius: 1,
-            overflow: 'auto',
-            fontSize: '0.875rem'
-          }}
-        >
-{`{
+            <Paper sx={{ p: 3, mt: 4 }}>
+                <Typography variant="h6" gutterBottom>
+                    Формат JSON файла
+                </Typography>
+                <Typography variant="body2" color="text.secondary" paragraph>
+                    Дорожная карта должна быть в формате JSON со следующей
+                    структурой:
+                </Typography>
+                <Box
+                    component="pre"
+                    sx={{
+                        backgroundColor: 'grey.100',
+                        p: 2,
+                        borderRadius: 1,
+                        overflow: 'auto',
+                        fontSize: '0.875rem',
+                    }}
+                >
+                    {`{
   "title": "Название карты",
   "description": "Описание карты (опционально)",
   "items": [
@@ -93,28 +100,29 @@ const AddTechnology = () => {
     }
   ]
 }`}
-        </Box>
-      </Paper>
+                </Box>
+            </Paper>
 
-      <Paper sx={{ p: 3, mt: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          Пример дорожной карты
-        </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
-          Скопируйте этот пример, сохраните как .json файл и загрузите:
-        </Typography>
-        <Box
-          component="pre"
-          sx={{
-            backgroundColor: 'grey.100',
-            p: 2,
-            borderRadius: 1,
-            overflow: 'auto',
-            fontSize: '0.75rem',
-            maxHeight: 400
-          }}
-        >
-{`{
+            <Paper sx={{ p: 3, mt: 3 }}>
+                <Typography variant="h6" gutterBottom>
+                    Пример дорожной карты
+                </Typography>
+                <Typography variant="body2" color="text.secondary" paragraph>
+                    Скопируйте этот пример, сохраните как .json файл и
+                    загрузите:
+                </Typography>
+                <Box
+                    component="pre"
+                    sx={{
+                        backgroundColor: 'grey.100',
+                        p: 2,
+                        borderRadius: 1,
+                        overflow: 'auto',
+                        fontSize: '0.75rem',
+                        maxHeight: 400,
+                    }}
+                >
+                    {`{
   "title": "React Roadmap",
   "description": "Дорожная карта изучения React",
   "items": [
@@ -200,41 +208,103 @@ const AddTechnology = () => {
     }
   ]
 }`}
-        </Box>
-        <Button
-          variant="outlined"
-          sx={{ mt: 2 }}
-          onClick={() => {
-            const example = {
-              title: "React Roadmap",
-              description: "Дорожная карта изучения React",
-              items: [
-                { id: "jsx", title: "JSX", description: "Синтаксис JSX и его особенности.", resources: [{ title: "React Docs", url: "https://react.dev" }] },
-                { id: "components", title: "Компоненты", description: "Создание и использование компонентов React.", resources: [] },
-                { id: "props", title: "Props", description: "Передача данных между компонентами.", resources: [] },
-                { id: "state", title: "State", description: "Управление состоянием компонента.", resources: [] },
-                { id: "hooks", title: "Хуки", description: "Использование хуков React.", resources: [] },
-                { id: "events", title: "События", description: "Обработка событий.", resources: [] },
-                { id: "conditional", title: "Условный рендеринг", description: "Условное отображение.", resources: [] },
-                { id: "lists", title: "Списки", description: "Рендеринг списков.", resources: [] },
-                { id: "forms", title: "Формы", description: "Работа с формами.", resources: [] },
-                { id: "routing", title: "Маршрутизация", description: "React Router.", resources: [] }
-              ]
-            };
-            const blob = new Blob([JSON.stringify(example, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'react-roadmap-example.json';
-            a.click();
-            URL.revokeObjectURL(url);
-          }}
-        >
-          Скачать пример
-        </Button>
-      </Paper>
-    </Container>
-  );
+                </Box>
+                <Button
+                    variant="outlined"
+                    sx={{ mt: 2 }}
+                    onClick={() => {
+                        const example = {
+                            title: 'React Roadmap',
+                            description: 'Дорожная карта изучения React',
+                            items: [
+                                {
+                                    id: 'jsx',
+                                    title: 'JSX',
+                                    description:
+                                        'Синтаксис JSX и его особенности.',
+                                    resources: [
+                                        {
+                                            title: 'React Docs',
+                                            url: 'https://react.dev',
+                                        },
+                                    ],
+                                },
+                                {
+                                    id: 'components',
+                                    title: 'Компоненты',
+                                    description:
+                                        'Создание и использование компонентов React.',
+                                    resources: [],
+                                },
+                                {
+                                    id: 'props',
+                                    title: 'Props',
+                                    description:
+                                        'Передача данных между компонентами.',
+                                    resources: [],
+                                },
+                                {
+                                    id: 'state',
+                                    title: 'State',
+                                    description:
+                                        'Управление состоянием компонента.',
+                                    resources: [],
+                                },
+                                {
+                                    id: 'hooks',
+                                    title: 'Хуки',
+                                    description: 'Использование хуков React.',
+                                    resources: [],
+                                },
+                                {
+                                    id: 'events',
+                                    title: 'События',
+                                    description: 'Обработка событий.',
+                                    resources: [],
+                                },
+                                {
+                                    id: 'conditional',
+                                    title: 'Условный рендеринг',
+                                    description: 'Условное отображение.',
+                                    resources: [],
+                                },
+                                {
+                                    id: 'lists',
+                                    title: 'Списки',
+                                    description: 'Рендеринг списков.',
+                                    resources: [],
+                                },
+                                {
+                                    id: 'forms',
+                                    title: 'Формы',
+                                    description: 'Работа с формами.',
+                                    resources: [],
+                                },
+                                {
+                                    id: 'routing',
+                                    title: 'Маршрутизация',
+                                    description: 'React Router.',
+                                    resources: [],
+                                },
+                            ],
+                        };
+                        const blob = new Blob(
+                            [JSON.stringify(example, null, 2)],
+                            { type: 'application/json' }
+                        );
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'react-roadmap-example.json';
+                        a.click();
+                        URL.revokeObjectURL(url);
+                    }}
+                >
+                    Скачать пример
+                </Button>
+            </Paper>
+        </Container>
+    );
 };
 
 export default AddTechnology;

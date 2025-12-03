@@ -28,7 +28,6 @@ const NEXT_STATUS = {
     [STATUS.COMPLETED]: STATUS.NOT_STARTED,
 };
 
-
 const SimpleTechCard = ({ technology, onStatusChange, onCardClick }) => {
     const { id, title, description, status, deadline, notes, resources } =
         technology;
@@ -134,6 +133,49 @@ const SimpleTechCard = ({ technology, onStatusChange, onCardClick }) => {
                 >
                     {description || 'Нет описания'}
                 </Typography>
+
+                {hasNotes && (
+                    <Box
+                        sx={{
+                            mt: 1.5,
+                            p: 1,
+                            backgroundColor: 'rgba(25, 118, 210, 0.04)',
+                            borderRadius: 1,
+                            borderLeft: 2,
+                            borderColor: 'primary.main',
+                        }}
+                    >
+                        <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{
+                                fontSize: '0.75rem',
+                                fontStyle: 'italic',
+                                display: 'block',
+                                mb: 0.5,
+                                color: 'primary.main',
+                                fontWeight: 500,
+                            }}
+                        >
+                            Заметки:
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: '-webkit-box',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical',
+                                lineHeight: 1.4,
+                                fontSize: '0.8rem',
+                            }}
+                        >
+                            {notes.trim()}
+                        </Typography>
+                    </Box>
+                )}
 
                 <Box
                     sx={{

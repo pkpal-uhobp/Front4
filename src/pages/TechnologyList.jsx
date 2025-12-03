@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
     Container,
     Typography,
@@ -25,8 +24,7 @@ import SimpleTechCard from '../components/SimpleTechCard';
 import QuickActions from '../components/QuickActions';
 import ProgressBar from '../components/ProgressBar';
 
-const TechnologyList = () => {
-    const navigate = useNavigate();
+const TechnologyList = ({ onTechnologyClick }) => {
     const {
         roadmap,
         technologies,
@@ -71,7 +69,9 @@ const TechnologyList = () => {
     }, [technologies, statusFilter, searchQuery]);
 
     const handleCardClick = (id) => {
-        navigate(`/technology/${id}`);
+        if (onTechnologyClick) {
+            onTechnologyClick(id);
+        }
     };
 
     const handleStatusChange = (id, newStatus) => {
@@ -116,7 +116,9 @@ const TechnologyList = () => {
             return;
         }
         const randomIndex = Math.floor(Math.random() * notCompleted.length);
-        navigate(`/technology/${notCompleted[randomIndex].id}`);
+        if (onTechnologyClick) {
+            onTechnologyClick(notCompleted[randomIndex].id);
+        }
     };
 
     if (!roadmap) {
