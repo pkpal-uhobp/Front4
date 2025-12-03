@@ -4,11 +4,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 
-/**
- * Component with buttons for mass operations on technologies
- * "Mark all as completed", "Reset all statuses", "Export data", "Random technology"
- * Provides quick list management without going into detail mode
- */
+
 const QuickActions = ({
   onMarkAllComplete,
   onResetAll,

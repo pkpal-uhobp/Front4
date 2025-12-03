@@ -28,11 +28,7 @@ const NEXT_STATUS = {
     [STATUS.COMPLETED]: STATUS.NOT_STARTED,
 };
 
-/**
- * Enhanced technology card component with Material-UI
- * Modern design with color chips for categories and statuses
- * Action buttons, shadows and flexible adaptive layout
- */
+
 const SimpleTechCard = ({ technology, onStatusChange, onCardClick }) => {
     const { id, title, description, status, deadline, notes, resources } =
         technology;

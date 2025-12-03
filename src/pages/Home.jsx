@@ -17,11 +17,6 @@ import useTechnologies from '../hooks/useTechnologies';
 import ProgressBar from '../components/ProgressBar';
 import RoadmapImporter from '../components/RoadmapImporter';
 
-/**
- * Home page of the application
- * Overview of progress, brief statistics and widgets for quick access to main functions
- * Starting point for user after entering the system
- */
 const Home = () => {
   const navigate = useNavigate();
   const { roadmap, progress, stats, importRoadmap } = useTechnologies();
@@ -34,7 +29,7 @@ const Home = () => {
     }
   };
 
-  // If no roadmap is loaded, show import interface
+
   if (!roadmap) {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>

@@ -1,11 +1,6 @@
 import { Box, Typography, LinearProgress, Tooltip } from '@mui/material';
 
-/**
- * Universal component for progress visualization
- * Can display overall progress for all technologies
- * or progress for a specific category/technology
- * Supports animation and color/height customization
- */
+
 const ProgressBar = ({
   value,
   label = 'Прогресс',

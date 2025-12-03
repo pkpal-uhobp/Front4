@@ -1,7 +1,6 @@
 import { useMemo, useCallback } from 'react';
 import useLocalStorage from './useLocalStorage';
 
-// Status constants
 export const STATUS = {
   NOT_STARTED: 'not_started',
   IN_PROGRESS: 'in_progress',
@@ -20,16 +19,10 @@ export const STATUS_COLORS = {
   [STATUS.COMPLETED]: '#4caf50'
 };
 
-/**
- * Hook for managing technology business logic
- * Provides functions for adding, deleting, updating status and notes
- * Calculates overall progress and encapsulates filtering/sorting logic
- */
 const useTechnologies = () => {
   const [roadmap, setRoadmap] = useLocalStorage('roadmap', null);
   const [userProgress, setUserProgress] = useLocalStorage('userProgress', {});
 
-  // Get technology by ID with user progress merged
   const getTechnologyById = useCallback((id) => {
     if (!roadmap || !roadmap.items) return null;
     const tech = roadmap.items.find(item => item.id === id);
@@ -44,7 +37,6 @@ const useTechnologies = () => {
     };
   }, [roadmap, userProgress]);
 
-  // Get all technologies with user progress
   const technologies = useMemo(() => {
     if (!roadmap || !roadmap.items) return [];
     return roadmap.items.map(item => ({
@@ -55,7 +47,6 @@ const useTechnologies = () => {
     }));
   }, [roadmap, userProgress]);
 
-  // Calculate overall progress
   const progress = useMemo(() => {
     if (technologies.length === 0) return 0;
     const completed = technologies.filter(t => t.status === STATUS.COMPLETED).length;
@@ -72,7 +63,6 @@ const useTechnologies = () => {
     return { total, completed, inProgress, notStarted };
   }, [technologies]);
 
-  // Update technology status
   const updateStatus = useCallback((id, status) => {
     setUserProgress(prev => ({
       ...prev,
@@ -83,7 +73,6 @@ const useTechnologies = () => {
     }));
   }, [setUserProgress]);
 
-  // Update technology notes
   const updateNotes = useCallback((id, notes) => {
     setUserProgress(prev => ({
       ...prev,
@@ -94,7 +83,6 @@ const useTechnologies = () => {
     }));
   }, [setUserProgress]);
 
-  // Update technology deadline
   const updateDeadline = useCallback((id, deadline) => {
     setUserProgress(prev => ({
       ...prev,
@@ -105,7 +93,6 @@ const useTechnologies = () => {
     }));
   }, [setUserProgress]);
 
-  // Import roadmap from JSON
   const importRoadmap = useCallback((data) => {
     // Validate required fields
     if (!data || typeof data !== 'object') {
@@ -117,8 +104,7 @@ const useTechnologies = () => {
     if (!Array.isArray(data.items)) {
       throw new Error('Неверный формат файла: отсутствует массив пунктов (items)');
     }
-    
-    // Validate items
+
     for (const item of data.items) {
       if (!item.id) {
         throw new Error('Неверный формат файла: каждый пункт должен иметь уникальный идентификатор (id)');
@@ -127,8 +113,7 @@ const useTechnologies = () => {
         throw new Error(`Неверный формат файла: пункт ${item.id} должен иметь название (title)`);
       }
     }
-    
-    // Import roadmap data
+
     setRoadmap({
       title: data.title,
       description: data.description || '',
@@ -139,17 +124,14 @@ const useTechnologies = () => {
         resources: item.resources || []
       }))
     });
-    
-    // Import user progress if present
+
     if (data.userProgress) {
       setUserProgress(data.userProgress);
     } else {
-      // Reset progress for new roadmap
       setUserProgress({});
     }
   }, [setRoadmap, setUserProgress]);
 
-  // Export roadmap with user progress
   const exportRoadmap = useCallback(() => {
     if (!roadmap) return null;
     
@@ -160,12 +142,10 @@ const useTechnologies = () => {
     };
   }, [roadmap, userProgress]);
 
-  // Reset all progress
   const resetAllProgress = useCallback(() => {
     setUserProgress({});
   }, [setUserProgress]);
 
-  // Mark all as completed
   const markAllCompleted = useCallback(() => {
     if (!technologies.length) return;
     
@@ -179,12 +159,10 @@ const useTechnologies = () => {
     setUserProgress(newProgress);
   }, [technologies, userProgress, setUserProgress]);
 
-  // Filter technologies by status
   const filterByStatus = useCallback((status) => {
     return technologies.filter(t => t.status === status);
   }, [technologies]);
 
-  // Search technologies
   const searchTechnologies = useCallback((query) => {
     if (!query) return technologies;
     const lowerQuery = query.toLowerCase();

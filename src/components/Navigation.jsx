@@ -30,12 +30,7 @@ const navItems = [
   { path: '/add', label: 'Добавить', icon: <AddIcon /> }
 ];
 
-/**
- * Navigation component
- * Displays navigation menu with links to all main sections
- * Uses React Router for navigation without page reload
- * Adaptive version for mobile devices
- */
+
 const Navigation = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -108,7 +103,7 @@ const Navigation = () => {
                   component="div"
                   sx={{ flexGrow: 0, mr: 4 }}
                 >
-                  🎯 Tech Tracker
+                  Tech Tracker
                 </Typography>
                 <Box sx={{ flexGrow: 1, display: 'flex', gap: 1 }}>
                   {navItems.map((item) => (

@@ -12,11 +12,6 @@ import {
 import useTechnologies from '../hooks/useTechnologies';
 import RoadmapImporter from '../components/RoadmapImporter';
 
-/**
- * Page for adding or editing technology
- * Contains form with field validation: name, description, category, complexity, deadline, learning resources
- * Checks URL correctness and required fields in real time
- */
 const AddTechnology = () => {
   const navigate = useNavigate();
   const { roadmap, importRoadmap } = useTechnologies();

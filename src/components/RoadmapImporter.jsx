@@ -11,12 +11,7 @@ import {
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
-/**
- * Component for importing technologies from external sources
- * Supports loading roadmaps from API, JSON files
- * Drag-and-drop for easy data import
- * Allows quickly adding sets of technologies for learning
- */
+
 const RoadmapImporter = ({ onImport, isLoading = false }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState(null);

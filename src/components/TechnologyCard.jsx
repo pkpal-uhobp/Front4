@@ -10,11 +10,7 @@ const STATUS_ICONS = {
   completed: <CheckCircleIcon fontSize="small" />
 };
 
-/**
- * Basic technology card component
- * Displays name, description, category and current progress with visual status indicator
- * Handles clicks to change learning status
- */
+
 const TechnologyCard = ({ technology, onStatusChange, onCardClick }) => {
   const { id, title, description, status } = technology;
 

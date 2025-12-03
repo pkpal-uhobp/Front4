@@ -48,11 +48,7 @@ const theme = createTheme({
   },
 });
 
-/**
- * Main application component
- * Sets up routing, manages authentication, provides general context for child components
- * Contains main interface structure: navigation, content area and footer
- */
+
 function App() {
   return (
     <ThemeProvider theme={theme}>

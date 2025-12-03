@@ -25,12 +25,6 @@ import SimpleTechCard from '../components/SimpleTechCard';
 import QuickActions from '../components/QuickActions';
 import ProgressBar from '../components/ProgressBar';
 
-/**
- * Page with all technologies
- * Supports filtering by categories and statuses
- * Search by name and description
- * Displays technologies in grid or list with sorting option
- */
 const TechnologyList = () => {
     const navigate = useNavigate();
     const {

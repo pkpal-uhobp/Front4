@@ -20,11 +20,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import EventIcon from '@mui/icons-material/Event';
 import useTechnologies, { STATUS, STATUS_LABELS, STATUS_COLORS } from '../hooks/useTechnologies';
 
-/**
- * Page with detailed technology information
- * Full description, current status, user notes, deadline, learning resources (links)
- * Allows editing details and learning progress
- */
+
 const TechnologyDetail = () => {
   const { id } = useParams();
   const {

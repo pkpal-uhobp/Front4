@@ -34,12 +34,6 @@ const STATUS_ICONS = {
   [STATUS.COMPLETED]: <CheckCircleIcon />
 };
 
-/**
- * Main application dashboard with Material-UI
- * Contains tabs for switching between sections
- * Statistical cards, progress charts, recent technology lists and category distribution
- * Provides a complete view of learning progress
- */
 const Dashboard = () => {
   const navigate = useNavigate();
   const { roadmap, technologies, progress, stats } = useTechnologies();

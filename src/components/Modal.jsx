@@ -10,12 +10,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-/**
- * General modal window component for various tasks
- * Confirmation of actions, showing details, forms in modal windows
- * Supports closing by clicking on background, Esc key
- * Has accessible ARIA attributes
- */
+
 const Modal = ({
   open,
   onClose,

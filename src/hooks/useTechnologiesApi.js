@@ -1,17 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 
-/**
- * Hook for interacting with external APIs
- * Loads technologies from remote sources, handles loading and error states
- * Supports request cancellation and debounce for search
- */
+
 const useTechnologiesApi = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
   const abortControllerRef = useRef(null);
 
-  // Cancel any ongoing request
   const cancelRequest = useCallback(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
@@ -19,7 +14,6 @@ const useTechnologiesApi = () => {
     }
   }, []);
 
-  // Fetch data from URL
   const fetchRoadmap = useCallback(async (url) => {
     cancelRequest();
     setIsLoading(true);
@@ -41,7 +35,6 @@ const useTechnologiesApi = () => {
       return json;
     } catch (err) {
       if (err.name === 'AbortError') {
-        // Request was cancelled, don't update state
         return null;
       }
       setError(err.message);
@@ -51,7 +44,6 @@ const useTechnologiesApi = () => {
     }
   }, [cancelRequest]);
 
-  // Load roadmap from file
   const loadFromFile = useCallback((file) => {
     return new Promise((resolve, reject) => {
       if (!file) {
@@ -94,9 +86,7 @@ const useTechnologiesApi = () => {
     });
   }, []);
 
-  // Debounced search
   const debounceRef = useRef(null);
-  
   const debouncedSearch = useCallback((query, callback, delay = 300) => {
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
@@ -107,7 +97,6 @@ const useTechnologiesApi = () => {
     }, delay);
   }, []);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       cancelRequest();
@@ -117,12 +106,10 @@ const useTechnologiesApi = () => {
     };
   }, [cancelRequest]);
 
-  // Clear error
   const clearError = useCallback(() => {
     setError(null);
   }, []);
 
-  // Clear data
   const clearData = useCallback(() => {
     setData(null);
   }, []);
