@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { flushSync } from 'react-dom';
 import {
     Typography,
     Box,
@@ -24,37 +25,27 @@ const TechnologyDetail = ({ id, onClose }) => {
     const { getTechnologyById, updateStatus, updateNotes, updateDeadline } =
         useTechnologies();
 
-    // Get technology data directly from the hook
     const technology = useMemo(
         () => getTechnologyById(id),
         [id, getTechnologyById]
     );
 
-    // Local form state for notes (only notes need local state for edit tracking)
     const [localNotes, setLocalNotes] = useState('');
     const [localDeadline, setLocalDeadline] = useState('');
     const [saved, setSaved] = useState(false);
 
-    // Initialize local state when technology changes
-    const initializeForm = useCallback(() => {
+    useEffect(() => {
         if (technology) {
             setLocalNotes(technology.notes || '');
             setLocalDeadline(technology.deadline || '');
         }
     }, [technology]);
 
-    // Check if we need to initialize (first load or tech changed)
-    useMemo(() => {
-        initializeForm();
-    }, [initializeForm]);
-
-    // Track if notes have changed
     const hasNotesChanges = useMemo(() => {
         if (!technology) return false;
         return localNotes !== (technology.notes || '');
     }, [localNotes, technology]);
 
-    // Track if deadline has changed
     const hasDeadlineChanges = useMemo(() => {
         if (!technology) return false;
         return localDeadline !== (technology.deadline || '');
@@ -64,10 +55,14 @@ const TechnologyDetail = ({ id, onClose }) => {
 
     const handleSave = () => {
         if (hasNotesChanges) {
-            updateNotes(id, localNotes);
+            flushSync(() => {
+                updateNotes(id, localNotes);
+            });
         }
         if (hasDeadlineChanges) {
-            updateDeadline(id, localDeadline);
+            flushSync(() => {
+                updateDeadline(id, localDeadline);
+            });
         }
 
         setSaved(true);
@@ -76,8 +71,10 @@ const TechnologyDetail = ({ id, onClose }) => {
 
     const handleDeleteNotes = () => {
         if (window.confirm('Удалить заметку?')) {
-            setLocalNotes('');
-            updateNotes(id, '');
+            flushSync(() => {
+                setLocalNotes('');
+                updateNotes(id, '');
+            });
         }
     };
 
@@ -108,7 +105,6 @@ const TechnologyDetail = ({ id, onClose }) => {
 
     return (
         <Box>
-            {/* Header */}
             <Box sx={{ p: 2, mb: 2 }}>
                 <Box
                     sx={{
@@ -142,7 +138,6 @@ const TechnologyDetail = ({ id, onClose }) => {
                     </Typography>
                 )}
 
-                {/* Resources */}
                 {technology.resources && technology.resources.length > 0 && (
                     <Box sx={{ mt: 2 }}>
                         <Typography variant="subtitle2" gutterBottom>
@@ -168,7 +163,6 @@ const TechnologyDetail = ({ id, onClose }) => {
                 )}
             </Box>
 
-            {/* Status and deadline management */}
             <Box sx={{ p: 2, mb: 2 }}>
                 <Typography variant="h6" gutterBottom>
                     Управление статусом
@@ -242,7 +236,6 @@ const TechnologyDetail = ({ id, onClose }) => {
                 </Box>
             </Box>
 
-            {/* Notes section */}
             <Box sx={{ p: 2 }}>
                 <Box
                     sx={{

@@ -38,11 +38,9 @@ const TechnologyList = ({ onTechnologyClick }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
 
-    // Filter technologies
     const filteredTechnologies = useMemo(() => {
         let result = technologies;
 
-        // Filter by status
         if (statusFilter === 'overdue') {
             const today = new Date();
             result = result.filter(
@@ -55,7 +53,6 @@ const TechnologyList = ({ onTechnologyClick }) => {
             result = result.filter((t) => t.status === statusFilter);
         }
 
-        // Filter by search query
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase();
             result = result.filter(
@@ -133,7 +130,6 @@ const TechnologyList = ({ onTechnologyClick }) => {
 
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
-            {/* Header */}
             <Box sx={{ mb: 3 }}>
                 <Typography
                     variant="h4"
@@ -144,7 +140,6 @@ const TechnologyList = ({ onTechnologyClick }) => {
                     {roadmap.title}
                 </Typography>
 
-                {/* Progress bar */}
                 <Paper sx={{ p: 2, mb: 3 }}>
                     <ProgressBar
                         value={progress}
@@ -155,7 +150,6 @@ const TechnologyList = ({ onTechnologyClick }) => {
                 </Paper>
             </Box>
 
-            {/* Filters and Actions */}
             <Paper sx={{ p: 2, mb: 3 }}>
                 <Grid container spacing={2} alignItems="center">
                     <Grid size={{ xs: 12, md: 4 }}>
@@ -285,7 +279,6 @@ const TechnologyList = ({ onTechnologyClick }) => {
                 </Grid>
             </Paper>
 
-            {/* Status chips summary */}
             <Box sx={{ display: 'flex', gap: 1, mb: 3, flexWrap: 'wrap' }}>
                 <Chip
                     label={`Всего: ${technologies.length}`}
@@ -317,7 +310,6 @@ const TechnologyList = ({ onTechnologyClick }) => {
                 )}
             </Box>
 
-            {/* Technologies grid */}
             {filteredTechnologies.length === 0 ? (
                 <Paper sx={{ p: 4, textAlign: 'center' }}>
                     <Typography color="text.secondary">
@@ -329,7 +321,12 @@ const TechnologyList = ({ onTechnologyClick }) => {
             ) : (
                 <Grid container spacing={2}>
                     {filteredTechnologies.map((tech) => (
-                        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={tech.id}>
+                        <Grid
+                            size={{ xs: 12, sm: 6, md: 4 }}
+                            key={`${tech.id}-${tech.notes || ''}-${
+                                tech.status
+                            }-${tech.deadline || ''}`}
+                        >
                             <SimpleTechCard
                                 technology={tech}
                                 onCardClick={handleCardClick}
